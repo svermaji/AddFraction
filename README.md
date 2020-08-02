@@ -13,3 +13,4 @@ In one calculation user can provide any number of problems per line of different
 Please refer attached images for examples<br>
 
 #### Images<br>
+![Image of Yaktocat](https://github.com/svermaji/AddFraction/blob/master/add-fraction.png) 
