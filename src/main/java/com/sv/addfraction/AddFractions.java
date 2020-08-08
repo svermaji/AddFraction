@@ -17,7 +17,7 @@ public class AddFractions extends AppFrame {
 
     private JTextArea taQuestion;
     private JTextArea taAnswer;
-    private JButton btnCalculate, btnSample, btnExit;
+    private JButton btnCalculate, btnSample, btnExcelSample, btnExit;
 
     int[] num, den, denLcm;
 
@@ -40,7 +40,7 @@ public class AddFractions extends AppFrame {
         setTitle("Add Fractions");
 
         qPanel.setLayout(new BorderLayout());
-        qBtns.setLayout(new BoxLayout(qBtns, BoxLayout.Y_AXIS));
+        qBtns.setLayout(new GridLayout(4, 1));
 
         Border emptyBorder = new EmptyBorder(new Insets(5, 5, 5, 5));
 
@@ -48,15 +48,19 @@ public class AddFractions extends AppFrame {
         taAnswer = new JTextArea(5, 60);
         taAnswer.setEditable(false);
         taAnswer.setForeground(Color.BLUE);
-        btnCalculate = new JButton("Calculate");
-        btnSample = new JButton("Sample");
+        btnCalculate = new AppButton("Calculate", 'C');
+        btnSample = new AppButton("Sample", 'S');
+        btnExcelSample = new AppButton("Excel Sample", 'E');
         btnCalculate.addActionListener(evt -> startCalculate(taQuestion.getText()));
         btnSample.addActionListener(evt -> showSample());
-        btnExit = new JButton("Exit");
+        btnExcelSample.addActionListener(evt -> showExcelSample());
+        btnExit = new AppExitButton();
         qBtns.add(btnCalculate);
         qBtns.add(btnSample);
+        qBtns.add(btnExcelSample);
         qBtns.add(btnExit);
         JScrollPane jspQues = new JScrollPane(taQuestion);
+        jspQues.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         jspQues.setBorder(emptyBorder);
         qPanel.add(jspQues, BorderLayout.CENTER);
         qPanel.add(qBtns, BorderLayout.EAST);
@@ -82,7 +86,15 @@ public class AddFractions extends AppFrame {
         startCalculate(taQuestion.getText());
     }
 
+    private void showExcelSample() {
+        taQuestion.setText("3\t4\t5\n6\t6\t8\n\n3\t10\t7\n9\t4\t7");
+        startCalculate(taQuestion.getText());
+    }
+
     private void startCalculate(String text) {
+        if (text.contains("\t")) {
+            text = convertFormat (text);
+        }
         String[] questions = text.split("\n");
         taAnswer.setText("");
         for (String q : questions) {
@@ -93,6 +105,23 @@ public class AddFractions extends AppFrame {
                 // no action
             }
         }
+    }
+
+    private String convertFormat(String text) {
+        String[] questions = text.split("\n");
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < questions.length; i+=3) {
+            String[] nums = questions[i].split("\t");
+            String[] dens = questions[i+1].split("\t");
+            for (int j = 0; j < nums.length; j++) {
+                sb.append(nums[j]).append("/").append(dens[j]);
+                if (j < nums.length-1) {
+                    sb.append(" ");
+                }
+            }
+            sb.append("\n");
+        }
+        return sb.toString();
     }
 
     private String calculate(String[] args) {
