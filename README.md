@@ -5,8 +5,12 @@ Utility in Java8+ to add fractions and get result in fraction or simplified way.
 To run the program on windows see run.bat<br>
 
 #### Update on 08-Aug-2020<br>
-Now added support excel format so values from excel cells can be copied directly.<br>
+Now added support for excel format so values from excel cells can be copied directly.<br>
 Cell values must be TAB key separated and first line will be numerators and second line will be denominators and third line will be empty to provide a gap between two problems.<br>
+Added excel sample button.<br>
+Minor UI changes, now buttons are of equal width.<br>
+Add mnemonic keys, so underlined character can be used along with ALT key using keyboard directly.<br>
+Example: `ALT+x` to exit the application.<br>
 
 #### Description<br>
 This program can be used as command line as well but for user's convenience swing UI has been provided.<br>
