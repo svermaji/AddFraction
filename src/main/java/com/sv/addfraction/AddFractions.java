@@ -49,9 +49,9 @@ public class AddFractions extends AppFrame {
         qBtns.setLayout(new GridLayout(4, 1));
 
         Border emptyBorder = new EmptyBorder(new Insets(5, 5, 5, 5));
-
-        taQuestion = new JTextArea(configs.getConfig(DefaultConfigs.Config.QUESTION), 5, 60);
-        taAnswer = new JTextArea(5, 60);
+        int taRows = 8, taCols = 70;
+        taQuestion = new JTextArea(configs.getConfig(DefaultConfigs.Config.QUESTION), taRows, taCols);
+        taAnswer = new JTextArea(taRows, taCols);
         taAnswer.setEditable(false);
         taAnswer.setForeground(Color.BLUE);
         btnCalculate = new AppButton("Calculate", 'C');
