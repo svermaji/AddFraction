@@ -4,6 +4,9 @@ Utility in Java8+ to add fractions and get result in fraction or simplified way.
 ## Usage<br>
 To run the program on windows see run.bat<br>
 
+#### Update on 10-Aug-2020<br>
+ - Added a configuration and logger.  Log file will be created now and on exit questions will be save to file and reload on startup.
+
 #### Update on 08-Aug-2020<br>
  - Added support for excel format so values from excel cells can be copied directly.
  - Cell values must be TAB key separated and first line will be numerators and second line will be denominators and third line will be empty to provide a gap between two problems.

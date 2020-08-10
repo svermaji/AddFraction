@@ -17,7 +17,8 @@ public class AddFractions extends AppFrame {
 
     private JTextArea taQuestion;
     private JTextArea taAnswer;
-    private JButton btnCalculate, btnSample, btnExcelSample, btnExit;
+    private MyLogger logger;
+    private DefaultConfigs configs;
 
     int[] num, den, denLcm;
 
@@ -29,6 +30,11 @@ public class AddFractions extends AppFrame {
      * This method initializes the form.
      */
     private void initComponents() {
+        logger = MyLogger.createLogger("add-fraction.log");
+
+        configs = new DefaultConfigs(logger);
+
+        JButton btnCalculate, btnSample, btnExcelSample, btnExit;
         Container parentContainer = getContentPane();
         JPanel qPanel = new JPanel();
         JPanel qBtns = new JPanel();
@@ -44,7 +50,7 @@ public class AddFractions extends AppFrame {
 
         Border emptyBorder = new EmptyBorder(new Insets(5, 5, 5, 5));
 
-        taQuestion = new JTextArea(5, 60);
+        taQuestion = new JTextArea(configs.getConfig(DefaultConfigs.Config.QUESTION), 5, 60);
         taAnswer = new JTextArea(5, 60);
         taAnswer.setEditable(false);
         taAnswer.setForeground(Color.BLUE);
@@ -77,8 +83,8 @@ public class AddFractions extends AppFrame {
             }
         });
 
-        showSample();
         setToCenter();
+        startCalculate(taQuestion.getText());
     }
 
     private void showSample() {
@@ -99,10 +105,10 @@ public class AddFractions extends AppFrame {
         taAnswer.setText("");
         for (String q : questions) {
             try {
-                taAnswer.append(calculate(q.split(" ")));
+                taAnswer.append(calculate(q.split(Utils.SPACE)));
                 taAnswer.append("\n");
             } catch (Exception e) {
-                // no action
+                logger.warn("Error in calculating.  Details: " + e.getMessage());
             }
         }
     }
@@ -116,7 +122,7 @@ public class AddFractions extends AppFrame {
             for (int j = 0; j < nums.length; j++) {
                 sb.append(nums[j]).append("/").append(dens[j]);
                 if (j < nums.length-1) {
-                    sb.append(" ");
+                    sb.append(Utils.SPACE);
                 }
             }
             sb.append("\n");
@@ -158,12 +164,10 @@ public class AddFractions extends AppFrame {
         if (sum / lcm >= 1) {
             quotientAns = " or " + (sum / lcm);
             if (sum % lcm > 0)
-                remainderAns = " " + sum % lcm + "/" + lcm;
+                remainderAns = Utils.SPACE + sum % lcm + "/" + lcm;
         }
 
-        String simplifiedAns = simplified(sum, lcm);
-
-        return question + " = " + ans + quotientAns + remainderAns + simplifiedAns;
+        return question + " = " + ans + quotientAns + remainderAns + simplified(sum, lcm);
 
     }
 
@@ -185,7 +189,7 @@ public class AddFractions extends AppFrame {
             if (sum / lcm >= 1) {
                 sbOut.append(" or ").append(sum / lcm);
                 if (sum % lcm > 0)
-                    sbOut.append(" ").append(sum % lcm).append("/").append(lcm);
+                    sbOut.append(Utils.SPACE).append(sum % lcm).append("/").append(lcm);
             }
             return sbOut.toString();
         }
@@ -231,8 +235,14 @@ public class AddFractions extends AppFrame {
      * Exit the Application
      */
     private void exitForm() {
+        configs.saveConfig(this);
         setVisible(false);
         dispose();
+        logger.dispose();
         System.exit(0);
+    }
+
+    public String getQuestions() {
+        return taQuestion.getText();
     }
 }
